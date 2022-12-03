@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
-const MONGO_ATLAS = process.env.MONGO_ATLAS
+const MONGO_ATLAS = "mongodb+srv://oja:oja@oja.xjriywi.mongodb.net/?retryWrites=true&w=majority"
 
 
 mongoose.connect(MONGO_ATLAS, (err)=>{

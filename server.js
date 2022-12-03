@@ -18,7 +18,7 @@ server.use(
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({
-      mongoUrl: process.env.MONGO_ATLAS,
+      mongoUrl: "mongodb+srv://oja:oja@oja.xjriywi.mongodb.net/?retryWrites=true&w=majority",
       collectionName: "sessions",
     }),
     cookie: {
