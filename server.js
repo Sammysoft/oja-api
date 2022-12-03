@@ -14,7 +14,7 @@ dotenv.config();
 
 server.use(
   session({
-    secret: process.env.PASSPORT_SECRET,
+    secret: "oja",
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({
