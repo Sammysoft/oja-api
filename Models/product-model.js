@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const productSchema = mongoose.Schema({
-    pictures:[4],
+    item_pictures:[],
     user_id: {type: String},
     item_name:{type:String},
     item_category:{type:String},

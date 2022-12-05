@@ -1,6 +1,7 @@
 import express from "express";
 import "./db.js";
 import UserRouter from "./Routes/user-route.js";
+import ProductRouter from "./Routes/product-route.js";
 import bodyParser from "body-parser";
 import cors from "cors";
 import passport from "passport"
@@ -51,3 +52,4 @@ server.listen(port, () =>
 );
 
 server.use("/api", UserRouter);
+server.use("/api", ProductRouter);
