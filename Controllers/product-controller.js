@@ -85,7 +85,7 @@ export const Product_Controller = {
 
   _getAllProducts: async (req, res, next) => {
     try {
-      const products = await Product.find({});
+      const products = await Product.find();
       res.status(200).json({
         data: products,
       });
