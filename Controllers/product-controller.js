@@ -63,7 +63,7 @@ export const Product_Controller = {
 
   _getApprovedProducts: async (req, res, next) => {
     try {
-      const products = await Products.find({ item_approval: true });
+      const products = await Product.find({ item_approval: true });
       res.status(200).json({ data: products });
     } catch (error) {
       res
@@ -85,7 +85,7 @@ export const Product_Controller = {
 
   _getAllProducts: async (req, res, next) => {
     try {
-      const products = await Products.find({});
+      const products = await Product.find({});
       res.status(200).json({
         data: products,
       });
