@@ -8,7 +8,8 @@ const userSchema = mongoose.Schema({
     state:{type:String},
     local_government:{type:String},
     profile_picture:{type:String},
-    usertype: {type:String, default: "User"}
+    usertype: {type:String, default: "User"},
+    status:{type:String, default: "Active"}
 }, {timestamps: true})
 
 const User = mongoose.model("User", userSchema);

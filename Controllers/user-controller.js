@@ -13,8 +13,8 @@ export const user_controller = {
         state,
         local_government,
         profile_picture,
+        usertype,
       } = req.body;
-      console.log(req.body);
 
       const findUser = await User.findOne({ fullname: fullname, email: email });
       if (findUser != null) {
@@ -39,6 +39,7 @@ export const user_controller = {
           user.state = state;
           user.local_government = local_government;
           user.profile_picture = profile_picture;
+          user.usertype = usertype;
 
           bcrypt.genSalt(10, (err, salt) => {
             if (!err) {
@@ -154,4 +155,24 @@ export const user_controller = {
         .json({ data: "Internal Server Error, please contact support" });
     }
   },
+
+  _blockUser: async (req, res, next) => {
+    try {
+      const user = await User.findOneAndUpdate({ status: "Blocked" });
+      res.status(200).json({ data: user });
+    } catch (error) {
+      res
+        .status(400)
+        .json({ data: "Internal Server Error, please contact support!" });
+    }
+  },
+
+  _getAllUsers: async(req,res,next)=>{
+    try {
+        const users = await User.find({});
+        res.status(200).json({data: users})
+    } catch (error) {
+        res.status(400).json({data:"Internal Server Error, please contact support!"})
+    }
+  }
 };

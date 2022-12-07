@@ -7,7 +7,8 @@ const productSchema = mongoose.Schema({
     item_category:{type:String},
     item_subcategory:{type:String},
     item_description: {type:String},
-    item_price:{type:String}
+    item_price:{type:String},
+    item_approval:{type:Boolean, default: false}
 }, {timestamps: true})
 
 const Product = mongoose.model("Product", productSchema);

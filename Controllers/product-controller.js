@@ -34,4 +34,65 @@ export const Product_Controller = {
       });
     }
   },
+
+  _getSellerProduct: async (req, res, next) => {
+    try {
+      const product = await Product.find({ user_id: req.params.id });
+      product &&
+        res.status(200).json({
+          data: product,
+        });
+    } catch (error) {
+      res.status(400).json({
+        data: "Could not fetch products at the moment, please contact support or refresh your page.",
+      });
+    }
+  },
+
+  _deleteSellerProduct: async (req, res, next) => {
+    try {
+      const product = await Product.findOne({ _id: req.params.id });
+      Product.findByIdAndDelete(req.params.id);
+      res.status(200).json({ data: product.item_name });
+    } catch (error) {
+      res
+        .status(400)
+        .json({ data: "Internal Server Error, please contact support!" });
+    }
+  },
+
+  _getApprovedProducts: async (req, res, next) => {
+    try {
+      const products = await Products.find({ item_approval: true });
+      res.status(200).json({ data: products });
+    } catch (error) {
+      res
+        .status(400)
+        .json({ data: "Internal Server Error, please contact support!" });
+    }
+  },
+
+  _getPendingProducts: async (req, res, next) => {
+    try {
+      const products = await Product.find({ item_approval: false });
+      res.status(200).json({ data: products });
+    } catch (error) {
+      res.status(400).json({
+        data: "Internal Server Error, please contact support!",
+      });
+    }
+  },
+
+  _getAllProducts: async (req, res, next) => {
+    try {
+      const products = await Products.find({});
+      res.status(200).json({
+        data: products,
+      });
+    } catch (error) {
+      res.status(400).json({
+        data: "Internal Server Error, please contact support!",
+      });
+    }
+  },
 };
