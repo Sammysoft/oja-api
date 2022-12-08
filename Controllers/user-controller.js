@@ -167,12 +167,27 @@ export const user_controller = {
     }
   },
 
-  _getAllUsers: async(req,res,next)=>{
+  _getAllUsers: async (req, res, next) => {
     try {
-        const users = await User.find({});
-        res.status(200).json({data: users})
+      const users = await User.find({});
+      res.status(200).json({ data: users });
     } catch (error) {
-        res.status(400).json({data:"Internal Server Error, please contact support!"})
+      res
+        .status(400)
+        .json({ data: "Internal Server Error, please contact support!" });
     }
-  }
+  },
+
+  _blockUser: async (req, res, next) => {
+    try {
+      const user = await User.findById({_id: req.params.id});
+      user.status = !user.status
+      user.save();
+      res.status(200).json({data: `${user.fullname}`})
+    } catch (error) {
+      res
+        .status(400)
+        .json({ data: "Internal Server Error, Please contact Support!" });
+    }
+  },
 };

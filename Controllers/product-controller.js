@@ -51,8 +51,7 @@ export const Product_Controller = {
 
   _deleteSellerProduct: async (req, res, next) => {
     try {
-      const product = await Product.findOne({ _id: req.params.id });
-      Product.findByIdAndDelete(req.params.id);
+      const product = await Product.findOneAndDelete({_id: req.params.id})
       res.status(200).json({ data: product.item_name });
     } catch (error) {
       res
@@ -95,4 +94,15 @@ export const Product_Controller = {
       });
     }
   },
+
+  _getAProduct: async (req,res,next)=>{
+    try {
+        const product = await Product.findyId({_id:req.params.id});
+        res.status(200).json({data: product})
+    } catch (error) {
+        res.status(400).json({
+          data: "Internal Server Error, please contact support!"
+        })
+    }
+  }
 };

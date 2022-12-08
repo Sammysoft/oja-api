@@ -23,5 +23,5 @@ Route.get(
 Route.post("/profile/update/:id", user_controller._updateProfile);
 Route.get("/user/:id", user_controller._getUser);
 Route.get("/get/users", user_controller._getAllUsers);
-Route.post("/users/block", user_controller._blockUser);
+Route.post("/users/block/:id", user_controller._blockUser);
 export default Route;

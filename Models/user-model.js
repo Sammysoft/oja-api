@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
     local_government:{type:String},
     profile_picture:{type:String},
     usertype: {type:String, default: "User"},
-    status:{type:String, default: "Active"}
+    status:{type:Boolean, default: true}
 }, {timestamps: true})
 
 const User = mongoose.model("User", userSchema);

@@ -10,5 +10,6 @@ ProductRouter.post("/item/delete/:id", Product_Controller._deleteSellerProduct);
 ProductRouter.get("/products/approved", Product_Controller._getApprovedProducts);
 ProductRouter.get('/products/pending', Product_Controller._getPendingProducts);
 ProductRouter.get("/products", Product_Controller._getAllProducts);
+ProductRouter.get("/product/:id", Product_Controller._getAProduct);
 
 export default ProductRouter;
