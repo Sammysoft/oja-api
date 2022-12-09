@@ -1,4 +1,5 @@
 import Product from "../Models/product-model.js";
+import User from "../Models/user-model.js";
 
 export const Product_Controller = {
   _createProduct: async (req, res, next) => {
@@ -51,7 +52,7 @@ export const Product_Controller = {
 
   _deleteSellerProduct: async (req, res, next) => {
     try {
-      const product = await Product.findOneAndDelete({_id: req.params.id})
+      const product = await Product.findOneAndDelete({ _id: req.params.id });
       res.status(200).json({ data: product.item_name });
     } catch (error) {
       res
@@ -95,14 +96,48 @@ export const Product_Controller = {
     }
   },
 
-  _getAProduct: async (req,res,next)=>{
+  _getAProduct: async (req, res, next) => {
     try {
-        const product = await Product.findyId({_id:req.params.id});
-        res.status(200).json({data: product})
+      const product = await Product.findById({ _id: req.params.id });
+      res.status(200).json({ data: product });
     } catch (error) {
-        res.status(400).json({
-          data: "Internal Server Error, please contact support!"
-        })
+      res.status(400).json({
+        data: "Internal Server Error, please contact support!",
+      });
     }
-  }
+  },
+
+  _approveSellerProduct: async (req, res, next) => {
+    try {
+      console.log(req.params.id)
+      const product = await Product.findById({_id: req.params.id});
+      console.log(product)
+      product.item_approval = true;
+      product.save();
+      res.status(200).json({ data: product.item_name });
+    } catch (error) {
+      res
+        .status(400)
+        .json({ data: "Internal server errror, please contact support!" });
+    }
+  },
+
+  _getProductSeller: async (req, res, next) => {
+    try {
+      const { user_id } = req.body;
+      console.log(user_id)
+      const seller = await User.findOne({ _id: user_id });
+      seller && res.status(200).json({ data: seller  });
+      !seller &&
+        res
+          .status(400)
+          .json({
+            data: "Seller's product can not be found!, this may be a technical issue.",
+          });
+    } catch (error) {
+      res
+        .status(400)
+        .json({ data: "Internal Server Error, please contact support!" });
+    }
+  },
 };

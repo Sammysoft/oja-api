@@ -11,5 +11,7 @@ ProductRouter.get("/products/approved", Product_Controller._getApprovedProducts)
 ProductRouter.get('/products/pending', Product_Controller._getPendingProducts);
 ProductRouter.get("/products", Product_Controller._getAllProducts);
 ProductRouter.get("/product/:id", Product_Controller._getAProduct);
+ProductRouter.post("/product/seller",Product_Controller._getProductSeller);
+ProductRouter.get("/product/approve/:id", Product_Controller._approveSellerProduct);
 
 export default ProductRouter;
