@@ -15,7 +15,7 @@ Route.get(
     });
     if (!req.user) {
       res.status(400).json({
-        data: "Please Login",
+        data: null
       });
     }
   }

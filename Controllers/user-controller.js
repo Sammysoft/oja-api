@@ -81,7 +81,7 @@ export const user_controller = {
                   email: UserDetails.fullname,
                 };
                 const accesstoken = jwt.sign(payload, "oja", {
-                  expiresIn: "2h",
+                  expiresIn: "3d",
                 });
 
                 res.status(200).json({ token: "Bearer " + accesstoken });
@@ -156,16 +156,16 @@ export const user_controller = {
     }
   },
 
-  _blockUser: async (req, res, next) => {
-    try {
-      const user = await User.findOneAndUpdate({ status: "Blocked" });
-      res.status(200).json({ data: user });
-    } catch (error) {
-      res
-        .status(400)
-        .json({ data: "Internal Server Error, please contact support!" });
-    }
-  },
+  // _blockUser: async (req, res, next) => {
+  //   try {
+  //     const user = await User.findOneAndUpdate({ status: "Blocked" });
+  //     res.status(200).json({ data: user });
+  //   } catch (error) {
+  //     res
+  //       .status(400)
+  //       .json({ data: "Internal Server Error, please contact support!" });
+  //   }
+  // },
 
   _getAllUsers: async (req, res, next) => {
     try {

@@ -109,9 +109,9 @@ export const Product_Controller = {
 
   _approveSellerProduct: async (req, res, next) => {
     try {
-      console.log(req.params.id)
-      const product = await Product.findById({_id: req.params.id});
-      console.log(product)
+      console.log(req.params.id);
+      const product = await Product.findById({ _id: req.params.id });
+      console.log(product);
       product.item_approval = true;
       product.save();
       res.status(200).json({ data: product.item_name });
@@ -125,15 +125,30 @@ export const Product_Controller = {
   _getProductSeller: async (req, res, next) => {
     try {
       const { user_id } = req.body;
-      console.log(user_id)
+      console.log(user_id);
       const seller = await User.findOne({ _id: user_id });
-      seller && res.status(200).json({ data: seller  });
+      seller && res.status(200).json({ data: seller });
       !seller &&
-        res
-          .status(400)
-          .json({
-            data: "Seller's product can not be found!, this may be a technical issue.",
-          });
+        res.status(400).json({
+          data: "Seller's product can not be found!, this may be a technical issue.",
+        });
+    } catch (error) {
+      res
+        .status(400)
+        .json({ data: "Internal Server Error, please contact support!" });
+    }
+  },
+
+  _getProductCategory: async (req, res, next) => {
+    try {
+      const { query } = req.body;
+      const product = await Product.find({ item_category: query });
+      if (product) {
+        res.status(200).json({ data: product });
+      } else {
+        res.status(400),
+          json({ data: "Could not find any product in this category..." });
+      }
     } catch (error) {
       res
         .status(400)
