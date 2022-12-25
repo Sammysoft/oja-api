@@ -2,6 +2,7 @@ import express from "express";
 import "./db.js";
 import UserRouter from "./Routes/user-route.js";
 import ProductRouter from "./Routes/product-route.js";
+import chatRoute from "./Routes/chat-route.js";
 import bodyParser from "body-parser";
 import cors from "cors";
 import passport from "passport"
@@ -53,3 +54,4 @@ server.listen(port, () =>
 
 server.use("/api", UserRouter);
 server.use("/api", ProductRouter);
+server.use("/api", chatRoute);

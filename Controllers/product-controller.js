@@ -12,6 +12,7 @@ export const Product_Controller = {
         item_price,
         user_id,
         item_description,
+        item_status
       } = req.body;
 
       if (!item_price || !item_category || !item_name || !user_id) {
@@ -23,6 +24,7 @@ export const Product_Controller = {
         newProduct.item_category = item_category;
         newProduct.item_description = item_description;
         newProduct.item_price = item_price;
+        newProduct.item_status = item_status;
         newProduct.item_subcategory = item_subcategory;
         newProduct.item_pictures.push(item_pictures);
         const pushedProduct = await newProduct.save();

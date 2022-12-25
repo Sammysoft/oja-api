@@ -180,14 +180,25 @@ export const user_controller = {
 
   _blockUser: async (req, res, next) => {
     try {
-      const user = await User.findById({_id: req.params.id});
-      user.status = !user.status
+      const user = await User.findById({ _id: req.params.id });
+      user.status = !user.status;
       user.save();
-      res.status(200).json({data: `${user.fullname}`})
+      res.status(200).json({ data: `${user.fullname}` });
     } catch (error) {
       res
         .status(400)
         .json({ data: "Internal Server Error, Please contact Support!" });
+    }
+  },
+
+  _getUserDetails: async (req, res, next) => {
+    try {
+      const { user } = req.body;
+      const foundUser= await User.findOne({fullname:user});
+    } catch (error) {
+      res
+        .status(400)
+        .json({ data: "Internal Server Error, please contact support!" });
     }
   },
 };

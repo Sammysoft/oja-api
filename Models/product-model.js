@@ -8,7 +8,8 @@ const productSchema = mongoose.Schema({
     item_subcategory:{type:String},
     item_description: {type:String},
     item_price:{type:String},
-    item_approval:{type:Boolean, default: false}
+    item_approval:{type:Boolean, default: false},
+    item_status:{type:String}
 }, {timestamps: true})
 
 const Product = mongoose.model("Product", productSchema);
