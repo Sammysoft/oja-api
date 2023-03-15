@@ -9,7 +9,6 @@ Route.get(
   "/dashboard",
   passport.authenticate("jwt", { session: false }),
   (req, res, next) => {
-    console.log(req.user)
     res.status(200).json({
       data: req.user,
     });

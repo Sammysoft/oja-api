@@ -144,7 +144,7 @@ export const Product_Controller = {
   _getProductCategory: async (req, res, next) => {
     try {
       const { query } = req.body;
-      const product = await Product.find({ item_category: query });
+      const product = await Product.find({ item_category: query, item_approval: true });
       if (product) {
         res.status(200).json({ data: product });
       } else {
