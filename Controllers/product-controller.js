@@ -12,7 +12,11 @@ export const Product_Controller = {
         item_price,
         user_id,
         item_description,
-        item_status
+        item_status,
+        item_state,
+        item_local,
+        item_phone,
+        item_email,
       } = req.body;
 
       if (!item_price || !item_category || !item_name || !user_id) {
@@ -27,6 +31,10 @@ export const Product_Controller = {
         newProduct.item_status = item_status;
         newProduct.item_subcategory = item_subcategory;
         newProduct.item_pictures.push(item_pictures);
+        newProduct.item_email = item_email;
+        newProduct.item_phone = item_phone;
+        newProduct.item_local = item_local;
+        newProduct.item_state = item_state;
         const pushedProduct = await newProduct.save();
 
         res.status(200).json({ data: pushedProduct });
@@ -144,13 +152,54 @@ export const Product_Controller = {
   _getProductCategory: async (req, res, next) => {
     try {
       const { query } = req.body;
-      const product = await Product.find({ item_category: query, item_approval: true });
+      const product = await Product.find({
+        item_category: query,
+        item_approval: true,
+      });
       if (product) {
         res.status(200).json({ data: product });
       } else {
         res.status(400),
           json({ data: "Could not find any product in this category..." });
       }
+    } catch (error) {
+      res
+        .status(400)
+        .json({ data: "Internal Server Error, please contact support!" });
+    }
+  },
+
+  _likeProduct: async (req, res, next) => {
+    try {
+      const { id, user_id } = req.body;
+      const product = await Product.findOne({ _id: id });
+      let foundProduct = await product.item_likes.indexOf(user_id);
+      if (foundProduct !== -1) {
+        res.status(400).json({ data: "You already liked this product" });
+      } else {
+        product.item_likes.push(user_id);
+        let likedProduct = await product.save();
+        res.status(200).json({
+          data: `${likedProduct.item_name} has been added to your favourites`,
+        });
+      }
+    } catch (error) {
+      res
+        .status(400)
+        .json({ data: "Internal Server Error, please contact support!" });
+    }
+  },
+
+  _getLikedProducts: async (req, res, next) => {
+    try {
+      const products = await Product.find();
+      let likedProducts = [];
+      products.map((item) => {
+        if (item.item_likes.indexOf(req.params.id) !== -1) {
+          likedProducts.push(item)
+        }
+      });
+      res.status(200).json({data: likedProducts})
     } catch (error) {
       res
         .status(400)

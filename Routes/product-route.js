@@ -19,5 +19,7 @@ ProductRouter.get(
   Product_Controller._approveSellerProduct
 );
 ProductRouter.post("/product/category", Product_Controller._getProductCategory);
+ProductRouter.post("/product/like", Product_Controller._likeProduct);
+ProductRouter.get("/product/get/likes/:id", Product_Controller._getLikedProducts)
 
 export default ProductRouter;
