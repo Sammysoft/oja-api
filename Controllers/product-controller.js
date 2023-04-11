@@ -28,6 +28,8 @@ export const Product_Controller = {
         !item_pictures
       ) {
         res.status(400).json({ data: "Ensure all item details are entered!" });
+      } else if (item_pictures.length < 5) {
+        res.status(400).json({ data: "Ensure You have added item images!" });
       } else {
         const newProduct = new Product();
         newProduct.user_id = user_id;
@@ -126,10 +128,20 @@ export const Product_Controller = {
 
   _approveSellerProduct: async (req, res, next) => {
     try {
-      console.log(req.params.id);
       const product = await Product.findById({ _id: req.params.id });
-      console.log(product);
       product.item_approval = true;
+      product.save();
+      res.status(200).json({ data: product.item_name });
+    } catch (error) {
+      res
+        .status(400)
+        .json({ data: "Internal server errror, please contact support!" });
+    }
+  },
+  _disApproveSellerProduct: async (req, res, next) => {
+    try {
+      const product = await Product.findById({ _id: req.params.id });
+      product.item_approval = false;
       product.save();
       res.status(200).json({ data: product.item_name });
     } catch (error) {
@@ -141,9 +153,7 @@ export const Product_Controller = {
 
   _declineSellerProduct: async (req, res, next) => {
     try {
-      console.log(req.params.id);
       const product = await Product.findById({ _id: req.params.id });
-      console.log(product);
       product.item_approval = false;
       product.declined = true;
       product.save();
@@ -158,7 +168,6 @@ export const Product_Controller = {
   _getProductSeller: async (req, res, next) => {
     try {
       const { user_id } = req.body;
-      console.log(user_id);
       const seller = await User.findOne({ _id: user_id });
       seller && res.status(200).json({ data: seller });
       !seller &&
@@ -312,10 +321,10 @@ export const Product_Controller = {
       const products = await Product.find({
         item_category: req.params.category,
         item_state: req.params.state,
-        item_approval: true
+        item_approval: true,
       });
 
-      res.status(200).json({data: products})
+      res.status(200).json({ data: products });
     } catch (error) {
       res
         .status(400)

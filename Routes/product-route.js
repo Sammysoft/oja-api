@@ -10,6 +10,7 @@ ProductRouter.get(
   "/products/approved",
   Product_Controller._getApprovedProducts
 );
+
 ProductRouter.get("/products/pending", Product_Controller._getPendingProducts);
 ProductRouter.get("/products", Product_Controller._getAllProducts);
 ProductRouter.get("/product/:id", Product_Controller._getAProduct);
@@ -17,6 +18,10 @@ ProductRouter.post("/product/seller", Product_Controller._getProductSeller);
 ProductRouter.get(
   "/product/approve/:id",
   Product_Controller._approveSellerProduct
+);
+ProductRouter.get(
+  "/product/disapprove/:id",
+  Product_Controller._disApproveSellerProduct
 );
 ProductRouter.get(
   "/product/decline/:id",
