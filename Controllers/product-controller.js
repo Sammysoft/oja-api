@@ -3,6 +3,7 @@ import User from "../Models/user-model.js";
 
 export const Product_Controller = {
   _createProduct: async (req, res, next) => {
+    console.log(req.body);
     try {
       const {
         item_name,
@@ -19,7 +20,13 @@ export const Product_Controller = {
         item_email,
       } = req.body;
 
-      if (!item_price || !item_category || !item_name || !user_id) {
+      if (
+        !item_price ||
+        !item_category ||
+        !item_name ||
+        !user_id ||
+        !item_pictures
+      ) {
         res.status(400).json({ data: "Ensure all item details are entered!" });
       } else {
         const newProduct = new Product();
@@ -36,10 +43,10 @@ export const Product_Controller = {
         newProduct.item_local = item_local;
         newProduct.item_state = item_state;
         const pushedProduct = await newProduct.save();
-
         res.status(200).json({ data: pushedProduct });
       }
     } catch (error) {
+      console.log(error);
       res.status(400).json({
         data: "Internal Server Error, Please try again or contact support!",
       });
@@ -132,6 +139,22 @@ export const Product_Controller = {
     }
   },
 
+  _declineSellerProduct: async (req, res, next) => {
+    try {
+      console.log(req.params.id);
+      const product = await Product.findById({ _id: req.params.id });
+      console.log(product);
+      product.item_approval = false;
+      product.declined = true;
+      product.save();
+      res.status(200).json({ data: product.item_name });
+    } catch (error) {
+      res
+        .status(400)
+        .json({ data: "Internal server errror, please contact support!" });
+    }
+  },
+
   _getProductSeller: async (req, res, next) => {
     try {
       const { user_id } = req.body;
@@ -196,10 +219,103 @@ export const Product_Controller = {
       let likedProducts = [];
       products.map((item) => {
         if (item.item_likes.indexOf(req.params.id) !== -1) {
-          likedProducts.push(item)
+          likedProducts.push(item);
         }
       });
-      res.status(200).json({data: likedProducts})
+      res.status(200).json({ data: likedProducts });
+    } catch (error) {
+      res
+        .status(400)
+        .json({ data: "Internal Server Error, please contact support!" });
+    }
+  },
+
+  _getMonthlyMetrics: async (req, res, next) => {
+    try {
+      const pipeline = [
+        {
+          $addFields: {
+            month: { $month: "$createdAt" }, // add a new field for month of creation
+            year: { $year: "$createdAt" }, // add a new field for year of creation
+          },
+        },
+        {
+          $match: {
+            year: new Date().getFullYear(), // match only the documents created in the current year
+          },
+        },
+        {
+          $group: {
+            _id: "$month", // group by month of creation
+            count: { $sum: 1 }, // count the number of documents in each group
+          },
+        },
+        {
+          $sort: { _id: 1 }, // sort the results by month in ascending order
+        },
+        {
+          $group: {
+            _id: null,
+            data: {
+              $push: "$count",
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            data: {
+              $map: {
+                input: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                as: "m",
+                in: {
+                  $ifNull: [
+                    {
+                      $first: {
+                        $filter: {
+                          input: "$data",
+                          as: "d",
+                          cond: {
+                            $eq: [
+                              {
+                                $indexOfArray: [
+                                  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                                  "$$m",
+                                ],
+                              },
+                              { $indexOfArray: ["$data", "$$d"] },
+                            ],
+                          },
+                        },
+                      },
+                    },
+                    0,
+                  ],
+                },
+              },
+            },
+          },
+        },
+      ];
+
+      const result = await Product.aggregate(pipeline).exec();
+      res.status(200).json({ data: result[0].data });
+    } catch (error) {
+      res
+        .status(400)
+        .json({ data: "Internal Server Error, please contact support!" });
+    }
+  },
+
+  _fetchProductByFilter: async (req, res, next) => {
+    try {
+      const products = await Product.find({
+        item_category: req.params.category,
+        item_state: req.params.state,
+        item_approval: true
+      });
+
+      res.status(200).json({data: products})
     } catch (error) {
       res
         .status(400)

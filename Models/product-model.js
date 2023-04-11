@@ -15,7 +15,8 @@ const productSchema = mongoose.Schema(
     item_local: { type: String },
     item_phone: { type: String },
     item_email: { type: String },
-    item_likes:[]
+    item_likes:[],
+    declined: {type: Boolean, default: false}
   },
   { timestamps: true }
 );
